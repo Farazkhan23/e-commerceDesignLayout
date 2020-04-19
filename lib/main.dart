@@ -30,10 +30,25 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   List<CartModel> cart = [];
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  // tHIS WILL CHECK ITEM EXISTENCE AND THEN DECIDE WHAT TO DO
   getClickedItem(CartModel newItem) {
-    setState(() {
-      cart.add(newItem);
-    });
+    bool flag = false;
+    for (var item in cart) {
+      if (item.itemID == newItem.itemID) {
+        flag = true;
+        break;
+      }
+    }
+
+    if (!flag) {
+      setState(() {
+        cart.add(newItem);
+      });
+    } else {
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text("Item already exists"),
+      ));
+    }
   }
 
   @override

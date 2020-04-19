@@ -10,7 +10,11 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> {
   double totalPrice = 0.0;
+  List<CartModel> cart  = [];
+  
+
   getPrice() {
+    totalPrice = 0.0;
     for (var item in widget.cartItems) {
       setState(() {
         totalPrice += item.price;
@@ -20,6 +24,7 @@ class _CartState extends State<Cart> {
 
   @override
   void initState() {
+    cart = widget.cartItems;
     getPrice();
     super.initState();
   }
@@ -36,12 +41,18 @@ class _CartState extends State<Cart> {
             children: <Widget>[
               Expanded(
                 child: ListView.builder(
-                  itemCount: widget.cartItems.length,
+                  itemCount: cart.length,
                   itemBuilder: (context, index) {
-                    CartModel currentItem = widget.cartItems[index];
+                    CartModel currentItem = cart[index];
                     return ListTile(
                       title: Text(currentItem.itemName),
                       trailing: Text(currentItem.price.toString()),
+                      onTap: (){
+                        setState(() {
+                          cart.remove(currentItem);
+                          getPrice();
+                        });
+                      },
                     );
                   },
                 ),
